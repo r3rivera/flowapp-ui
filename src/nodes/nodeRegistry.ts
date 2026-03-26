@@ -1,10 +1,10 @@
-import AccountCreationNode from './triggers/AccountCreationNode';
-import SendEmailNode from './actions/SendEmailNode';
-import GenericSMSMarketingNode from './actions/GenericSMSMarketingNode';
+import AppTriggerEventNode, { defaultData as customEventDefaults } from './triggers/AppEventTriggerNode';
+import SendEmailNode, { defaultData as sendEmailDefaults } from './actions/SendEmailNode';
+import GenericSMSMarketingNode, { defaultData as genericSMSDefaults } from './actions/GenericSMSMarketingNode';
 import type { NodeTypes } from '@xyflow/react';
 
 export const nodeTypes: NodeTypes = {
-  accountCreation: AccountCreationNode,
+  appTriggerEvent: AppTriggerEventNode,
   sendEmail: SendEmailNode,
   genericSMS: GenericSMSMarketingNode,
 };
@@ -18,21 +18,21 @@ export type NodeCatalogEntry = {
   
 export const nodeCatalog: NodeCatalogEntry[] = [
   {
-    type: 'accountCreation',
-    label: 'Account Creation',
+    type: 'appTriggerEvent',
+    label: 'App Trigger Event',
     category: 'trigger',
-    defaultData: { eventType: 'Account Created', description: '' },
+    defaultData: customEventDefaults,
   },
   {
     type: 'sendEmail',
     label: 'Send Email',
     category: 'action',
-    defaultData: { templateName: '', fields: [] },
+    defaultData: sendEmailDefaults,
   },
   {
     type: 'genericSMS',
     label: 'Generic SMS Marketing',
     category: 'action',
-    defaultData: { message: '' },
+    defaultData: genericSMSDefaults,
   },
 ];

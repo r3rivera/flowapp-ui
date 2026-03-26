@@ -32,7 +32,7 @@ export default function Sidebar({ onAddNode, onClear }: SidebarProps) {
         + Add Node
       </button>
       <hr className="border-gray-200" />
-      <span className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Flow</span>
+      <span className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Flow Control</span>
       <button
         onClick={handleSave}
         className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm font-medium hover:bg-gray-50 text-left"

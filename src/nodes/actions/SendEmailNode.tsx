@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { Handle, Position, type Node, type NodeProps } from '@xyflow/react';
+import { Handle, Position, type Node, type NodeProps, useReactFlow } from '@xyflow/react';
 
 type FieldType = 'String' | 'Number' | 'Boolean' | 'Date' | 'Email' | 'URL';
 
@@ -15,29 +15,43 @@ type SendEmailNodeData = Node<{
     fields: EmailField[];
 }>;
 
+export const defaultData = { templateName: '', fields: [] as EmailField[] };
+
 let fieldIdCounter = 0;
 
-export default function SendEmailNode({ data }: NodeProps<SendEmailNodeData>) {
+export default function SendEmailNode({ id, data }: NodeProps<SendEmailNodeData>) {
     const [templateName, setTemplateName] = useState(data.templateName ?? '');
     const [fieldInput, setFieldInput] = useState('');
     const [fields, setFields] = useState<EmailField[]>(data.fields ?? []);
+    const { updateNodeData } = useReactFlow();
 
     const stopPropagation = useCallback((e: React.MouseEvent) => e.stopPropagation(), []);
+
+    const handleTemplateNameChange = useCallback((value: string) => {
+        setTemplateName(value);
+        updateNodeData(id, { templateName: value, fields });
+    }, [id, updateNodeData, fields]);
 
     const addField = useCallback(() => {
         const name = fieldInput.trim();
         if (!name) return;
-        setFields((prev) => [...prev, { id: ++fieldIdCounter, name, type: 'String' }]);
+        const newFields = [...fields, { id: ++fieldIdCounter, name, type: 'String' as FieldType }];
+        setFields(newFields);
         setFieldInput('');
-    }, [fieldInput]);
+        updateNodeData(id, { templateName, fields: newFields });
+    }, [fieldInput, fields, id, updateNodeData, templateName]);
 
-    const deleteField = useCallback((id: number) => {
-        setFields((prev) => prev.filter((f) => f.id !== id));
-    }, []);
+    const deleteField = useCallback((fieldId: number) => {
+        const newFields = fields.filter((f) => f.id !== fieldId);
+        setFields(newFields);
+        updateNodeData(id, { templateName, fields: newFields });
+    }, [fields, id, updateNodeData, templateName]);
 
-    const updateFieldType = useCallback((id: number, type: FieldType) => {
-        setFields((prev) => prev.map((f) => (f.id === id ? { ...f, type } : f)));
-    }, []);
+    const updateFieldType = useCallback((fieldId: number, type: FieldType) => {
+        const newFields = fields.map((f) => (f.id === fieldId ? { ...f, type } : f));
+        setFields(newFields);
+        updateNodeData(id, { templateName, fields: newFields });
+    }, [fields, id, updateNodeData, templateName]);
 
     const handleKeyDown = useCallback(
         (e: React.KeyboardEvent) => {
@@ -65,7 +79,7 @@ export default function SendEmailNode({ data }: NodeProps<SendEmailNodeData>) {
                     <input
                         type="text"
                         value={templateName}
-                        onChange={(e) => setTemplateName(e.target.value)}
+                        onChange={(e) => handleTemplateNameChange(e.target.value)}
                         placeholder="Enter template name"
                         className="nodrag border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:border-blue-400 w-full"
                     />

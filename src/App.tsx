@@ -1,23 +1,61 @@
-import { useState } from 'react'
-import './App.css'
+import { useState, useCallback } from 'react'
+import { ReactFlow, 
+  applyNodeChanges, 
+  applyEdgeChanges, 
+  addEdge, 
+  Background, 
+  Controls, 
+  Panel,
+  type OnConnect,
+  type OnNodesChange,
+  type OnEdgesChange,
+ } from '@xyflow/react';
+import '@xyflow/react/dist/style.css';
+
+const initialNodes = [
+  { id: 'n1', position: { x: 0, y: 0 }, data: { label: 'Node 1' } },
+  { id: 'n2', position: { x: 0, y: 100 }, data: { label: 'Node 2' } },
+];
+const initialEdges = [{ id: 'n1-n2', source: 'n1', target: 'n2', type: 'step', label: 'trigger' }];
 
 function App() {
-  const [count, setCount] = useState(0)
+
+  const [nodes, setNodes] = useState(initialNodes);
+  const [edges, setEdges] = useState(initialEdges);
+ 
+  const onNodesChange:OnNodesChange = useCallback(
+    (changes: any[]) => setNodes((nodesSnapshot) => applyNodeChanges(changes, nodesSnapshot)),
+    [],
+  );
+  const onEdgesChange:OnEdgesChange = useCallback(
+    (changes: any[]) => setEdges((edgesSnapshot) => applyEdgeChanges(changes, edgesSnapshot)),
+    [],
+  );
+  const onConnect:OnConnect = useCallback(
+    (params: any) => setEdges((edgesSnapshot) => addEdge(params, edgesSnapshot)),
+    [],
+  );
 
   return (
-    <>
-    <div className="w-screen h-screen p-8">
-      <h1 className="text-2xl font-bold p-4 border border-gray-300">Hello World</h1>
-      <div className="mt-4">
-        <button
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-          onClick={() => setCount(count + 1)}
-        >
-          Count is {count}
-        </button>
-      </div>
+    <div>
+    <div style={{ width: '100vw', height: '100vh', border: '1px solid black' }}>
+      <ReactFlow
+        nodes={nodes}
+        edges={edges}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
+        onConnect={onConnect}
+        fitView
+      >
+        <Panel position="top-left">
+          <button style={{'border': '1px solid black'}} className='p-3 mr-3' onClick={() => setNodes([])}>Save nodes</button>
+          <button style={{'border': '1px solid black'}} className='p-3 mr-3' onClick={() => setEdges([])}>Clear edges</button>
+        </Panel>
+        <Controls />
+        <Background />
+      </ReactFlow>
     </div>
-    </>
+    </div>
   )
 }
 

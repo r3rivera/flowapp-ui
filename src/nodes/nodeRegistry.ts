@@ -12,7 +12,7 @@ export const nodeTypes: NodeTypes = {
 export type NodeCatalogEntry = {
   type: string;
   label: string;
-  category: 'trigger' | 'action';
+  category: 'trigger' | 'action' | 'condition';
   defaultData: Record<string, unknown>;
 };
   

@@ -2,11 +2,13 @@ import AppTriggerEventNode, { defaultData as customEventDefaults } from './trigg
 import SendEmailNode, { defaultData as sendEmailDefaults } from './actions/SendEmailNode';
 import GenericSMSMarketingNode, { defaultData as genericSMSDefaults } from './actions/GenericSMSMarketingNode';
 import type { NodeTypes } from '@xyflow/react';
+import ClientAttributeConditionNode, { defaultData as clientAttributeConditionDefaults} from './conditions/ClientAttributeConditionNode';
 
 export const nodeTypes: NodeTypes = {
   appTriggerEvent: AppTriggerEventNode,
   sendEmail: SendEmailNode,
   genericSMS: GenericSMSMarketingNode,
+  clientAttributeCondition: ClientAttributeConditionNode,
 };
 
 export type NodeCatalogEntry = {
@@ -35,4 +37,10 @@ export const nodeCatalog: NodeCatalogEntry[] = [
     category: 'action',
     defaultData: genericSMSDefaults,
   },
+  {
+    type: 'clientAttributeCondition',
+    label: 'Client Attribute Condition',
+    category: 'condition',
+    defaultData: clientAttributeConditionDefaults,
+  }
 ];

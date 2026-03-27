@@ -68,7 +68,7 @@ export default function SendEmailNode({ id, data }: NodeProps<SendEmailNodeData>
             <Handle type="target" position={Position.Left} />
 
             {/* Header */}
-            <div className="bg-primary px-3 py-2 rounded-t-lg border-b border-gray-300">
+            <div className="bg-secondary px-3 py-2 rounded-t-lg border-b border-gray-300">
                 <strong className="text-sm font-semibold">Action: Send Email</strong>
             </div>
 

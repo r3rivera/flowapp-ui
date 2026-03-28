@@ -8,7 +8,7 @@ type AddNodeModalProps = {
 };
 
 export default function AddNodeModal({ isOpen, onClose, onAdd }: AddNodeModalProps) {
-  const [activeTab, setActiveTab] = useState<'trigger' | 'action' | 'condition'>('trigger');
+  const [activeTab, setActiveTab] = useState<'trigger' | 'condition' | 'action'>('trigger');
 
   if (!isOpen) return null;
 
@@ -42,7 +42,7 @@ export default function AddNodeModal({ isOpen, onClose, onAdd }: AddNodeModalPro
 
         {/* Tabs */}
         <div className="flex border-b border-gray-200">
-          {(['trigger', 'action', 'condition'] as const).map((tab) => (
+          {(['trigger', 'condition', 'action'] as const).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}

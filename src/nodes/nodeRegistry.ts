@@ -4,6 +4,7 @@ import GenericSMSMarketingNode, { defaultData as genericSMSDefaults } from './ac
 import type { NodeTypes } from '@xyflow/react';
 import ClientAttributeConditionNode, { defaultData as clientAttributeConditionDefaults} from './conditions/ClientAttributeConditionNode';
 import ClientPreferredChannelNode, { defaultData as clientPreferredChannelDefaults} from './conditions/ClientPreferredChannelNode';
+import RuleEngineConditionNode, { defaultData as ruleEngineConditionDefaults} from './conditions/RuleEngineConditionNode';
 
 export const nodeTypes: NodeTypes = {
   appTriggerEvent: AppTriggerEventNode,
@@ -11,6 +12,7 @@ export const nodeTypes: NodeTypes = {
   genericSMS: GenericSMSMarketingNode,
   clientAttributeCondition: ClientAttributeConditionNode,
   clientPreferredChannel: ClientPreferredChannelNode,
+  ruleEngineCondition: RuleEngineConditionNode,
 };
 
 export type NodeCatalogEntry = {
@@ -50,5 +52,11 @@ export const nodeCatalog: NodeCatalogEntry[] = [
     label: 'Client Preferred Channel',
     category: 'condition',
     defaultData: clientPreferredChannelDefaults,
+  },
+  {
+    type: 'ruleEngineCondition',
+    label: 'Rule Engine',
+    category: 'condition',
+    defaultData: ruleEngineConditionDefaults,
   }
 ];

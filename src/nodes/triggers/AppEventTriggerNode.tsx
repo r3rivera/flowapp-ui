@@ -1,31 +1,34 @@
 import { useState, useCallback } from 'react';
 import { Handle, Position, type Node, type NodeProps, useReactFlow } from '@xyflow/react';
 
-type ProcessingMode = 'API' | 'Stream' | 'Batch';
+type appCode = 'BBA' | 'TOA' | 'LMI';
 
 export type TriggerCustomEventData = Node<{
     eventName: string;
-    processingMode: ProcessingMode;
+    appCode: appCode;
+    defaultTemplate?: string;
 }>;
 
-export const defaultData = { eventName: '', processingMode: 'API' as ProcessingMode };
+export const defaultData = { eventName: '', appCode: 'BBA' as appCode };
 
 export default function AppTriggerEventNode({ id, data }: NodeProps<TriggerCustomEventData>) {
     const [eventName, setEventName] = useState(data.eventName ?? '');
-    const [processingMode, setProcessingMode] = useState<ProcessingMode>(data.processingMode ?? 'API');
+const [appCode, setAppCode] = useState<appCode>(data.appCode ?? 'BBA');
     const { updateNodeData } = useReactFlow();
 
     const stopPropagation = useCallback((e: React.MouseEvent) => e.stopPropagation(), []);
 
     const handleEventNameChange = useCallback((value: string) => {
         setEventName(value);
-        updateNodeData(id, { eventName: value, processingMode });
-    }, [id, updateNodeData, processingMode]);
+        updateNodeData(id, { eventName: value, appCode });
+    }, [id, updateNodeData, appCode]);
 
-    const handleModeChange = useCallback((value: ProcessingMode) => {
-        setProcessingMode(value);
-        updateNodeData(id, { eventName, processingMode: value });
+    const handleModeChange = useCallback((value: appCode) => {
+        setAppCode(value);
+        updateNodeData(id, { eventName, appCode: value });
     }, [id, updateNodeData, eventName]);
+
+    const [defaultTemplate, setDefaultTemplate] = useState(data.defaultTemplate ?? '');
 
     return (
         <div
@@ -38,6 +41,21 @@ export default function AppTriggerEventNode({ id, data }: NodeProps<TriggerCusto
             </div>
 
             <div className="p-3 flex flex-col gap-3">
+
+                {/* Application Code */}
+                <div className="flex flex-col gap-1">
+                    <label className="text-xs font-medium text-gray-600">Application Code</label>
+                    <select
+                        value={appCode}
+                        onChange={(e) => handleModeChange(e.target.value as appCode)}
+                        className="nodrag border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:border-blue-400 w-full"
+                    >
+                        <option value="BBA">BBA</option>
+                        <option value="TOA">TOA</option>
+                        <option value="LMI">LMI</option>
+                    </select>
+                </div>
+
                 {/* Event Name */}
                 <div className="flex flex-col gap-1">
                     <label className="text-xs font-medium text-gray-600">Event Name</label>
@@ -50,19 +68,18 @@ export default function AppTriggerEventNode({ id, data }: NodeProps<TriggerCusto
                     />
                 </div>
 
-                {/* Processing Mode */}
+                {/* Event Name */}
                 <div className="flex flex-col gap-1">
-                    <label className="text-xs font-medium text-gray-600">Processing Mode</label>
-                    <select
-                        value={processingMode}
-                        onChange={(e) => handleModeChange(e.target.value as ProcessingMode)}
+                    <label className="text-xs font-medium text-gray-600">Default Template</label>
+                    <input
+                        type="text"
+                        value={defaultTemplate}
+                        onChange={(e) => setDefaultTemplate(e.target.value)}
+                        placeholder="Enter default template"
                         className="nodrag border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:border-blue-400 w-full"
-                    >
-                        <option value="API">API</option>
-                        <option value="Stream">Stream</option>
-                        <option value="Batch">Batch</option>
-                    </select>
+                    />
                 </div>
+
             </div>
 
             {/* Only a source handle — this node is always the flow start */}

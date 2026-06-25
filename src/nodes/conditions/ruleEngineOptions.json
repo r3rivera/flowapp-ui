@@ -1,0 +1,4 @@
+{
+    "clientAttributes": ["poid", "name", "hasBrokerage", "has529", "has401k", "hasRoth", "hasJoint"],
+    "operators": ["=", ">", "<"]
+}
